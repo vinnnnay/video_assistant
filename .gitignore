@@ -1,0 +1,39 @@
+# Ignore environment and local configuration
+.env
+.venv/
+
+# Ignore large generated or data folders
+downloades/
+vector_db/
+
+
+*.wav
+downloades/
+vector_db/
+__pycache__/
+.env
+    
+*.wav
+downloades/*
+# Ignore temporary and output files
+revlist.txt
+packinfo.txt
+*.log
+*.sqlite3
+
+# Ignore dependency and test artifacts
+Requirements.txt
+requirements.txt
+test.py
+
+# Python caches
+__pycache__/
+*.py[cod]
+*$py.class
+
+# VS Code settings
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
