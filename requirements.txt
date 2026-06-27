@@ -36,6 +36,11 @@ streamlit>=1.35.0
 streamlit-extras>=0.4.3           # Optional: extra UI components
 watchdog>=4.0.0                   # Faster Streamlit hot-reload on Linux/Mac
 
+
+torch>=2.2.0
+torchvision>=0.17.0
+torchaudio>=2.2.0
+
 # ── PDF & TXT Export ──────────────────────────────────────────────────────────
 fpdf2>=2.7.9                      # Generate PDF reports
 
