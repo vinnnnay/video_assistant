@@ -1,51 +1,36 @@
-# ── AI Meeting Assistant ── requirements.txt ──────────────────────────────────
-# Python >= 3.10 recommended
-
-# ── Audio / Video acquisition ─────────────────────────────────────────────────
-yt-dlp>=2024.4.9                  # Download audio from YouTube URLs
-pydub>=0.25.1                     # Audio slicing / format conversion
-ffmpeg-python>=0.2.0              # FFmpeg bindings (ffmpeg binary must be on PATH)
-
-# ── Speech-to-Text (local Whisper) ────────────────────────────────────────────
-openai-whisper>=20231117          # Local Whisper transcription
-torch>=2.2.0                      # PyTorch backend for Whisper
-torchaudio>=2.2.0                 # Audio I/O helpers for Torch
-
-# ── Translation (Hindi → English) ─────────────────────────────────────────────
-deep-translator>=1.11.4           # Lightweight Google Translate wrapper
-# OR use HuggingFace Helsinki-NLP models — uncomment if preferred:
-# transformers>=4.40.0
-# sentencepiece>=0.2.0
-
-# ── LLM / LangChain (Mistral free API) ────────────────────────────────────────
-langchain>=0.2.0
-langchain-core>=0.2.0
-langchain-community>=0.2.0
-langchain-mistralai>=0.1.0        # LangChain partner package for Mistral
-mistralai>=0.4.0                  # Official Mistral Python SDK
-
-# ── RAG Pipeline ──────────────────────────────────────────────────────────────
-chromadb>=0.5.0                   # Local vector store
-langchain-chroma>=0.1.0           # Chroma integration for LangChain
-sentence-transformers>=2.7.0      # HuggingFace embedding models (all-MiniLM etc.)
-langchain-huggingface>=0.0.3      # HuggingFaceEmbeddings integration for LangChain
-tiktoken>=0.7.0                   # Token counting / text splitting
-
-# ── Streamlit UI ──────────────────────────────────────────────────────────────
 streamlit>=1.35.0
-streamlit-extras>=0.4.3           # Optional: extra UI components
-watchdog>=4.0.0                   # Faster Streamlit hot-reload on Linux/Mac
 
+yt-dlp==2025.6.9
+ffmpeg-python
+pydub
 
-torch>=2.2.0
-torchvision>=0.17.0
-torchaudio>=2.2.0
+openai-whisper==20231117
 
-# ── PDF & TXT Export ──────────────────────────────────────────────────────────
-fpdf2>=2.7.9                      # Generate PDF reports
+torch==2.2.2
+torchvision==0.17.2
+torchaudio==2.2.2
 
-# ── Utilities ─────────────────────────────────────────────────────────────────
-python-dotenv>=1.0.1              # Load .env (API keys)
-tenacity>=8.3.0                   # Retry logic for API calls
-tqdm>=4.66.0                      # Progress bars
-numpy>=1.26.0                     # Numerical ops (Whisper / embeddings dep)
+transformers==4.52.4
+sentence-transformers==2.7.0
+
+deep-translator
+
+langchain
+langchain-core
+langchain-community
+langchain-mistralai
+mistralai
+
+chromadb
+langchain-chroma
+langchain-huggingface
+
+python-dotenv
+
+fpdf2
+
+numpy
+tiktoken
+tenacity
+tqdm
+watchdog
