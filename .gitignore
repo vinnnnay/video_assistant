@@ -12,6 +12,7 @@ downloades/
 vector_db/
 __pycache__/
 .env
+
     
 *.wav
 downloades/*
@@ -22,8 +23,6 @@ packinfo.txt
 *.sqlite3
 
 # Ignore dependency and test artifacts
-Requirements.txt
-requirements.txt
 test.py
 
 # Python caches

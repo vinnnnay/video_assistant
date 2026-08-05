@@ -68,6 +68,17 @@ def download_youtube_audio(url: str) -> str:
     return filename
 
 
+def get_video_id(url: str) -> str | None:
+    """Return the YouTube video id for a URL without downloading the file."""
+    ydl_opts = {"quiet": True}
+    try:
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            info = ydl.extract_info(url, download=False)
+            return info.get("id")
+    except Exception:
+        return None
+
+
 
 
 def convert_to_wav(input_path: str) -> str:

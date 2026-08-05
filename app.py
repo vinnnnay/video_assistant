@@ -1,5 +1,6 @@
 import streamlit as st
 from dotenv import load_dotenv
+import time
 
 load_dotenv()
 
@@ -215,7 +216,7 @@ details[open] .streamlit-expanderHeader {
 
 
 # ── Session state init ─────────────────────────────────────────────────────────
-for key in ["pipeline_result", "chat_history", "processing"]:
+for key in ["pipeline_result", "chat_history", "processing", "pipeline_error"]:
     if key not in st.session_state:
         st.session_state[key] = None if key != "chat_history" else []
 
@@ -257,6 +258,7 @@ with st.sidebar:
         if st.button("🔄 Reset", use_container_width=True):
             st.session_state.pipeline_result = None
             st.session_state.chat_history = []
+            st.session_state.pipeline_error = None
             st.rerun()
 
 
@@ -272,54 +274,49 @@ if run_btn:
     else:
         st.session_state.pipeline_result = None
         st.session_state.chat_history = []
+        st.session_state.processing = {"status": "Queued"}
 
-        with st.status("⚙️  Running pipeline…", expanded=True) as status:
-            try:
-                from utils.audio_processor import process_input
-                from core.transcriber import transcribe_all
-                from core.summarizer import summarize, generate_title
-                from core.extractor import extract_action_items, extract_key_decisions, extract_questions
-                from core.rag_engine import build_rag_chain
+        # Check cache first and otherwise run pipeline in background thread
+        from utils.cache import get_cached_result
+        from utils.audio_processor import get_video_id
+        from utils.worker import process_video_async
 
-                st.write("🎧 Processing audio/video input…")
-                chunks = process_input(source)
+        video_key = get_video_id(source) or source
+        cached = get_cached_result(video_key)
+        if cached:
+            st.success("Loaded previous result from cache — showing immediately.")
+            cached["rag_chain"] = None
+            st.session_state.pipeline_result = cached
+        else:
+            status_box = st.empty()
 
-                st.write("✍️  Transcribing…")
-                transcript = transcribe_all(chunks, language)
+            def progress_cb(message: str):
+                st.session_state.processing = {"status": message}
 
-                st.write("🏷️  Generating title…")
-                title = generate_title(transcript)
+            def done_cb(result: dict):
+                if result.get("error"):
+                    st.session_state.processing = {"status": "Error"}
+                    st.session_state.pipeline_result = None
+                    st.session_state.pipeline_error = result.get("error")
+                else:
+                    st.session_state.pipeline_result = result
+                    st.session_state.processing = {"status": "Complete"}
 
-                st.write("📋 Summarising…")
-                summary = summarize(transcript)
+            process_video_async(source, language, progress_cb, done_cb)
 
-                st.write("✅ Extracting action items…")
-                action_items = extract_action_items(transcript)
+            # Poll progress until complete
+            while True:
+                proc = st.session_state.get("processing", {})
+                status_box.markdown(f"**Status:** {proc.get('status','Queued')}")
+                if proc.get("status") in ("Complete", "Loaded from cache", "Error"):
+                    break
+                time.sleep(0.5)
 
-                st.write("🔑 Extracting key decisions…")
-                decisions = extract_key_decisions(transcript)
 
-                st.write("❓ Extracting open questions…")
-                questions = extract_questions(transcript)
-
-                st.write("🧠 Building RAG chain…")
-                rag_chain = build_rag_chain(transcript)
-
-                st.session_state.pipeline_result = {
-                    "title": title,
-                    "transcript": transcript,
-                    "summary": summary,
-                    "action_items": action_items,
-                    "key_decisions": decisions,
-                    "open_questions": questions,
-                    "rag_chain": rag_chain,
-                }
-                status.update(label="✅ Pipeline complete!", state="complete", expanded=False)
-
-            except Exception as e:
-                status.update(label="❌ Pipeline failed", state="error", expanded=True)
-                st.error(f"**Error:** {e}")
-
+# ── Error Display ─────────────────────────────────────────────────────────────
+if st.session_state.get("pipeline_error"):
+    st.error(f"❌ **Pipeline Error**: {st.session_state.pipeline_error}")
+    st.markdown('<div class="fancy-divider"></div>', unsafe_allow_html=True)
 
 # ── Results ───────────────────────────────────────────────────────────────────
 if st.session_state.pipeline_result:
