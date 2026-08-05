@@ -70,16 +70,38 @@ graph TD
    ```bash
    cp .env.example .env
    ```
-   Open `.env` and add your `MISTRAL_API_KEY` (and `SARVAM_API_KEY` if you are using Sarvam models).
+   1. Update your `.env` file with your Gemini API key.
+2. (Optional but Recommended) Extract your YouTube `cookies.txt` using a browser extension and place it in the project root to prevent YouTube from blocking your IP.
+3. Run the app:
+   ```bash
+   streamlit run app.py
+   ```
 
-## Running the Application
+## ☁️ Deployment (AWS EC2)
 
-### Running Locally
-To start the Streamlit application locally, run:
-```bash
-streamlit run app.py
-```
-The app will open in your default browser at `http://localhost:8501`.
+Because AI models and YouTube scraping are intensive, deploying on a dedicated virtual machine like AWS EC2 is recommended over free shared platforms.
+
+We have included automated deployment scripts for AWS EC2.
+
+1. **Launch an EC2 Instance:**
+   - Go to the AWS Console and launch a new **Ubuntu Server** EC2 instance.
+   - We recommend a `t3.medium` or larger for adequate CPU processing speed.
+   - Under **Network Settings**, ensure you allow **HTTP**, **HTTPS**, and add a Custom TCP rule to allow port **8501** (Streamlit's default port).
+
+2. **Automated Setup:**
+   - When launching the instance, scroll down to **Advanced Details**.
+   - In the **User data** text box at the very bottom, paste the contents of `deploy_ec2.sh`. 
+   - This script will automatically install Docker, clone this repository, and launch the application.
+
+3. **Provide Credentials (Required):**
+   - Once the server is running, SSH into your instance.
+   - Navigate to the project directory: `cd /home/ubuntu/video_assistant`
+   - Edit the `.env` file and add your `GEMINI_API_KEY`.
+   - Edit the `cookies.txt` file and paste your exported YouTube cookies. **This is mandatory on AWS**, otherwise YouTube will block the datacenter IP with a `403 Forbidden` error!
+   - Restart the Docker container to apply the changes: `docker compose restart`
+
+4. **Access the App:**
+   - Open your browser and navigate to `http://<YOUR_EC2_PUBLIC_IP>:8501`
 
 ### Running with Docker (Recommended for Deployment)
 If you want to run the application in an isolated container (which automatically handles system dependencies like `ffmpeg`), you can use Docker:
