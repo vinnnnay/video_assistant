@@ -70,7 +70,7 @@ graph TD
    ```bash
    cp .env.example .env
    ```
-   1. Update your `.env` file with your Gemini API key.
+   1. Update your `.env` file with your Mistral and Sarvam API keys.
 2. (Optional but Recommended) Extract your YouTube `cookies.txt` using a browser extension and place it in the project root to prevent YouTube from blocking your IP.
 3. Run the app:
    ```bash
@@ -86,9 +86,12 @@ This is the easiest way to host the app for free.
    - Save the file exactly as `cookies.txt` and commit it to this repository.
 2. Sign in to [share.streamlit.io](https://share.streamlit.io).
 3. Click **"New app"** and point it to your GitHub repository and `app.py` file.
-4. **Important:** Go to the Advanced Settings in Streamlit Cloud and add your API key to the **Secrets** section:
+4. **Important:** Go to the Advanced Settings in Streamlit Cloud and add your API keys to the **Secrets** section:
    ```toml
-   GEMINI_API_KEY="your_api_key_here"
+   MISTRAL_API_KEY="your_mistral_api_key"
+   SARVAM_API_KEY="your_sarvam_api_key"
+   WHISPER_MODEL="small"
+   SARVAM_STT_MODEL="saraas:v2.5"
    ```
 5. Click **Deploy**. The `packages.txt` file will automatically install the necessary `ffmpeg` system dependencies in the background!
 
@@ -111,7 +114,7 @@ We have included automated deployment scripts for AWS EC2.
 3. **Provide Credentials (Required):**
    - Once the server is running, SSH into your instance.
    - Navigate to the project directory: `cd /home/ubuntu/video_assistant`
-   - Edit the `.env` file and add your `GEMINI_API_KEY`.
+   - Edit the `.env` file and add your `MISTRAL_API_KEY` and `SARVAM_API_KEY`.
    - Edit the `cookies.txt` file and paste your exported YouTube cookies. **This is mandatory on AWS**, otherwise YouTube will block the datacenter IP with a `403 Forbidden` error!
    - Restart the Docker container to apply the changes: `docker compose restart`
 
