@@ -77,9 +77,24 @@ graph TD
    streamlit run app.py
    ```
 
+## ☁️ Deployment (Streamlit Community Cloud)
+
+This is the easiest way to host the app for free.
+
+1. **Get your YouTube Cookies (MANDATORY):** 
+   - Because Streamlit's servers are blocked by YouTube, you **must** use a browser extension (like "Get cookies.txt LOCALLY") to export your YouTube cookies.
+   - Save the file exactly as `cookies.txt` and commit it to this repository.
+2. Sign in to [share.streamlit.io](https://share.streamlit.io).
+3. Click **"New app"** and point it to your GitHub repository and `app.py` file.
+4. **Important:** Go to the Advanced Settings in Streamlit Cloud and add your API key to the **Secrets** section:
+   ```toml
+   GEMINI_API_KEY="your_api_key_here"
+   ```
+5. Click **Deploy**. The `packages.txt` file will automatically install the necessary `ffmpeg` system dependencies in the background!
+
 ## ☁️ Deployment (AWS EC2)
 
-Because AI models and YouTube scraping are intensive, deploying on a dedicated virtual machine like AWS EC2 is recommended over free shared platforms.
+Because AI models and YouTube scraping are intensive, deploying on a dedicated virtual machine like AWS EC2 is recommended over free shared platforms if you want maximum speed.
 
 We have included automated deployment scripts for AWS EC2.
 
