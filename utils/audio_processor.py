@@ -60,6 +60,9 @@ def download_youtube_audio(url: str) -> str:
         "js_runtimes": {"nodejs": {}},
         "extractor_args": {"youtube": ["player_client=web,default,-android_sdkless"]},
     }
+    
+    if os.path.exists("cookies.txt"):
+        ydl_opts["cookiefile"] = "cookies.txt"
 
     if ffmpeg_location:
         ydl_opts["ffmpeg_location"] = ffmpeg_location
@@ -73,6 +76,8 @@ def download_youtube_audio(url: str) -> str:
 def get_video_id(url: str) -> str | None:
     """Return the YouTube video id for a URL without downloading the file."""
     ydl_opts = {"quiet": True, "js_runtimes": {"nodejs": {}}, "extractor_args": {"youtube": ["player_client=web,default,-android_sdkless"]}}
+    if os.path.exists("cookies.txt"):
+        ydl_opts["cookiefile"] = "cookies.txt"
     try:
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(url, download=False)
