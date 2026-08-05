@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  video-assistant:
+    build: .
+    container_name: video-assistant
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./.env:/app/.env
+      # Include cookies.txt if it exists to bypass YouTube 403
+      - ./cookies.txt:/app/cookies.txt
+    restart: unless-stopped
+    environment:
+      - PYTHONUNBUFFERED=1
