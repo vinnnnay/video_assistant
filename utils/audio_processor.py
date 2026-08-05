@@ -57,7 +57,7 @@ def download_youtube_audio(url: str) -> str:
             }
         ],
         "quiet": True,
-        "js_runtimes": {"nodejs": {}},
+        "js_runtimes": {"node": {}},
         "extractor_args": {"youtube": ["player_client=web,default,-android_sdkless"]},
     }
     
@@ -75,7 +75,7 @@ def download_youtube_audio(url: str) -> str:
 
 def get_video_id(url: str) -> str | None:
     """Return the YouTube video id for a URL without downloading the file."""
-    ydl_opts = {"quiet": True, "js_runtimes": {"nodejs": {}}, "extractor_args": {"youtube": ["player_client=web,default,-android_sdkless"]}}
+    ydl_opts = {"quiet": True, "js_runtimes": {"node": {}}, "extractor_args": {"youtube": ["player_client=web,default,-android_sdkless"]}}
     if os.path.exists("cookies.txt"):
         ydl_opts["cookiefile"] = "cookies.txt"
     try:
