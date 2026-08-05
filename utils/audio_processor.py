@@ -57,7 +57,7 @@ def download_youtube_audio(url: str) -> str:
             }
         ],
         "quiet": True,
-        "js_runtimes": ["node"],
+        "js_runtimes": {"nodejs": {}},
     }
 
     if ffmpeg_location:
@@ -71,7 +71,7 @@ def download_youtube_audio(url: str) -> str:
 
 def get_video_id(url: str) -> str | None:
     """Return the YouTube video id for a URL without downloading the file."""
-    ydl_opts = {"quiet": True, "js_runtimes": ["node"]}
+    ydl_opts = {"quiet": True, "js_runtimes": {"nodejs": {}}}
     try:
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(url, download=False)
