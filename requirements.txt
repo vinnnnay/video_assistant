@@ -33,6 +33,7 @@ tiktoken>=0.7.0                   # Token counting / text splitting
 
 # ── Streamlit UI ──────────────────────────────────────────────────────────────
 streamlit>=1.35.0
+starlette<0.40.0                  # Fix GZipResponder crash in Streamlit Cloud
 streamlit-extras>=0.4.3           # Optional: extra UI components
 watchdog>=4.0.0                   # Faster Streamlit hot-reload on Linux/Mac
 
