@@ -72,5 +72,11 @@ def process_video_async(source: str, language: str, progress_cb: Callable[[str],
             done_cb({"error": str(e)})
 
     thread = threading.Thread(target=target, daemon=True)
+    try:
+        from streamlit.runtime.scriptrunner import add_script_run_ctx, get_script_run_ctx
+        if get_script_run_ctx():
+            add_script_run_ctx(thread)
+    except ImportError:
+        pass
     thread.start()
     return thread
